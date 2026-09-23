@@ -133,8 +133,11 @@ jobs:
           echo "${GRYPE_SHA256}  grype.tgz" | sha256sum -c -
           tar -xzf grype.tgz grype && sudo install -m 0755 grype /usr/local/bin/grype
 
-      - name: Scan SBOM (fail on fixable High/Critical)
-        run: grype sbom:sbom.cyclonedx.json --only-fixed --fail-on high -o table
+      - name: Scan SBOM (grype)
+        run: grype sbom:sbom.cyclonedx.json -o table -o json=grype_results.json
+
+      - name: Vulnerability gate (undocumented Critical/High only, RV.2.1)
+        run: python3 scripts/pr_vulnerability_gate.py --grype grype_results.json --exceptions policy/exceptions.json
 
   # ---------------------------------------------------------------------------
   # 3. Release: build, push, SBOM, keyless sign, attest (PS.3.1, PS.2.1)
