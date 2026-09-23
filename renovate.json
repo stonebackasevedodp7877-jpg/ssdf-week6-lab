@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Alternative to Dependabot (RV.2.1). Enable only one of the two bots.",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "docker:pinDigests",
+    ":semanticCommits"
+  ],
+  "labels": ["dependencies", "ssdf-rv.2.1"],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "schedule": ["at any time"]
+  },
+  "osvVulnerabilityAlerts": true,
+  "pip_requirements": {
+    "fileMatch": ["(^|/)requirements\\.txt$"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["flask", "werkzeug", "jinja2", "markupsafe", "itsdangerous", "click", "blinker"],
+      "groupName": "flask stack"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions (sha-pinned)"
+    }
+  ]
+}

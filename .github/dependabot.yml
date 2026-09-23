@@ -1,0 +1,40 @@
+# RV.2.1 - automated dependency remediation pull requests
+# Every PR re-runs hardened_pipeline.yml (source gates + PR image scan).
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /app
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    labels: [dependencies, security, ssdf-rv.2.1]
+    commit-message:
+      prefix: "deps(pip)"
+    groups:
+      flask-stack:
+        patterns: ["flask", "werkzeug", "jinja2", "markupsafe", "itsdangerous", "click", "blinker"]
+        update-types: [minor, patch]
+      security-fixes:
+        applies-to: security-updates
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    labels: [dependencies, container]
+    commit-message:
+      prefix: "deps(docker)"
+
+  # Keeps the 40-character SHA pins current; Dependabot also updates the
+  # "# vX.Y.Z" comment next to each pin.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels: [dependencies, ci]
+    commit-message:
+      prefix: "deps(actions)"
+    groups:
+      actions:
+        patterns: ["*"]
