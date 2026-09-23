@@ -1,0 +1,6 @@
+cosign.key
+evidence/
+*.zip
+__pycache__/
+run_lab_output*.log
+.claude/

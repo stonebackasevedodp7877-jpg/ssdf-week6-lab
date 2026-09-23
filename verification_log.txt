@@ -1,0 +1,579 @@
+
+==========================================================================
+SSDF Week 6 - Verification Log | student: ShuchenMeng
+==========================================================================
+Date (UTC)     : 2026-09-23T22:52:38Z
+Host           : Darwin 25.6.0 arm64
+docker         : 29.8.0
+cosign         : v3.1.3
+syft           : 1.52.0
+grype          : 0.119.0
+conftest       : Conftest: dev OPA: 1.20.2 
+python         : Python 3.9.6
+
+==========================================================================
+TASK 2.0 - Local OCI registry (cosign stores signatures next to the image)
+==========================================================================
+$ curl -sf http://localhost:5001/v2/
+{}[exit code: 0]
+
+==========================================================================
+TASK 2.1 - Hermetic build of ssdf-app:v6.0 (digest-pinned base, hash-locked deps)
+==========================================================================
+$ docker pull python:3.11-slim
+3.11-slim: Pulling from library/python
+Digest: sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
+Status: Image is up to date for python:3.11-slim
+docker.io/library/python:3.11-slim
+[exit code: 0]
+Base image pinned to: python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
+$ docker build --provenance=false --sbom=false --build-arg BASE_IMAGE=python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9 -t ssdf-app:v6.0 -t localhost:5001/ssdf-app:v6.0 .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.57kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 149B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 96B done
+#4 DONE 0.0s
+
+#5 [build 1/4] FROM docker.io/library/python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
+#5 resolve docker.io/library/python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9 done
+#5 DONE 0.0s
+
+#6 [build 2/4] WORKDIR /build
+#6 CACHED
+
+#7 [build 3/4] COPY app/requirements.txt .
+#7 CACHED
+
+#8 [build 4/4] RUN python -m venv /opt/venv  && /opt/venv/bin/pip install --require-hashes --only-binary=:all: -r requirements.txt  && /opt/venv/bin/pip uninstall -y wheel setuptools pip
+#8 2.918 Collecting flask==3.1.3 (from -r requirements.txt (line 7))
+#8 3.004   Downloading flask-3.1.3-py3-none-any.whl (103 kB)
+#8 3.031      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 103.4/103.4 kB 3.8 MB/s eta 0:00:00
+#8 3.066 Collecting werkzeug==3.1.8 (from -r requirements.txt (line 10))
+#8 3.084   Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
+#8 3.105      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 226.5/226.5 kB 11.6 MB/s eta 0:00:00
+#8 3.127 Collecting jinja2==3.1.6 (from -r requirements.txt (line 13))
+#8 3.145   Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#8 3.148      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 66.3 MB/s eta 0:00:00
+#8 3.211 Collecting markupsafe==3.0.3 (from -r requirements.txt (line 16))
+#8 3.230   Downloading markupsafe-3.0.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (24 kB)
+#8 3.250 Collecting itsdangerous==2.2.0 (from -r requirements.txt (line 106))
+#8 3.291   Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#8 3.317 Collecting click==8.3.3 (from -r requirements.txt (line 109))
+#8 3.335   Downloading click-8.3.3-py3-none-any.whl (110 kB)
+#8 3.337      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 110.5/110.5 kB 226.9 MB/s eta 0:00:00
+#8 3.358 Collecting blinker==1.9.0 (from -r requirements.txt (line 112))
+#8 3.377   Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#8 3.420 Installing collected packages: markupsafe, itsdangerous, click, blinker, werkzeug, jinja2, flask
+#8 3.615 Successfully installed blinker-1.9.0 click-8.3.3 flask-3.1.3 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.3 werkzeug-3.1.8
+#8 4.095 WARNING: Skipping wheel as it is not installed.
+#8 4.096 Found existing installation: setuptools 79.0.1
+#8 4.109 Uninstalling setuptools-79.0.1:
+#8 4.116   Successfully uninstalled setuptools-79.0.1
+#8 4.124 Found existing installation: pip 24.0
+#8 4.139 Uninstalling pip-24.0:
+#8 4.141   Successfully uninstalled pip-24.0
+#8 DONE 4.2s
+
+#9 [stage-1 2/5] RUN --network=none python -m pip uninstall -y pip setuptools wheel 2>/dev/null || true
+#9 CACHED
+
+#10 [stage-1 3/5] WORKDIR /app
+#10 CACHED
+
+#11 [stage-1 4/5] COPY --from=build /opt/venv /opt/venv
+#11 DONE 0.0s
+
+#12 [stage-1 5/5] COPY app/main.py .
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 exporting manifest sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 done
+#13 exporting config sha256:a257274f2a15f33f010f36b513e876cd7dd2dfac821cd65eb21b1394374e2c3a done
+#13 naming to docker.io/library/ssdf-app:v6.0 done
+#13 unpacking to docker.io/library/ssdf-app:v6.0 0.0s done
+#13 naming to localhost:5001/ssdf-app:v6.0 done
+#13 unpacking to localhost:5001/ssdf-app:v6.0 done
+#13 DONE 0.2s
+[exit code: 0]
+$ docker image inspect --format User={{.Config.User}}  Cmd={{.Config.Cmd}}  Size={{.Size}} ssdf-app:v6.0
+User=65534:65534  Cmd=[python main.py]  Size=220146883
+[exit code: 0]
+$ docker push localhost:5001/ssdf-app:v6.0
+The push refers to repository [localhost:5001/ssdf-app]
+88a708072759: Waiting
+bd36565c0fde: Waiting
+03f370686e3a: Waiting
+a16ecc1c5e5e: Waiting
+88a708072759: Waiting
+bd36565c0fde: Waiting
+03f370686e3a: Waiting
+a16ecc1c5e5e: Waiting
+88a708072759: Waiting
+bd36565c0fde: Waiting
+03f370686e3a: Waiting
+a16ecc1c5e5e: Waiting
+a16ecc1c5e5e: Waiting
+88a708072759: Waiting
+bd36565c0fde: Waiting
+03f370686e3a: Waiting
+03f370686e3a: Waiting
+a16ecc1c5e5e: Waiting
+88a708072759: Waiting
+bd36565c0fde: Waiting
+88a708072759: Waiting
+bd36565c0fde: Waiting
+03f370686e3a: Waiting
+a16ecc1c5e5e: Waiting
+59d157f63b1a: Pushed
+88a708072759: Layer already exists
+bd36565c0fde: Layer already exists
+03f370686e3a: Layer already exists
+a16ecc1c5e5e: Layer already exists
+f8dd002ea7ee: Layer already exists
+3786a49ecc9c: Layer already exists
+ab7aeca7abe6: Pushed
+v6.0: digest: sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 size: 1810
+[exit code: 0]
+Immutable image reference: localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+
+==========================================================================
+TASK 2.2 - Container-level CycloneDX SBOM (syft)
+==========================================================================
+$ syft registry:localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 -o cyclonedx-json=sbom.cyclonedx.json
+[exit code: 0]
+$ python3 - sbom.cyclonedx.json
+bomFormat=CycloneDX specVersion=1.7 serialNumber=urn:uuid:cfd600a6-310e-4626-9902-37330339918b
+metadata.component=localhost:5001/ssdf-app
+components=2765 by purl type: {'pkg:deb': 87, 'pkg:pypi': 8, 'pkg:generic': 1, '?': 2669}
+python packages: blinker==1.9.0, click==8.3.3, flask==3.1.3, itsdangerous==2.2.0, jinja2==3.1.6, markupsafe==3.0.3, packaging==26.3, werkzeug==3.1.8
+[exit code: 0]
+
+==========================================================================
+TASK 2.3 - Sign image, attach SBOM, sign SBOM attestation, sign SLSA provenance
+==========================================================================
+Public key (cosign.pub):
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEdOdHufc5Y6r7g2SjpJyfNya9pS2X
+Re+hFr8R+wOIZapX1NHBM6W7c/sHiNUckiZ1codIlZKpamYKuLM9ChrIiA==
+-----END PUBLIC KEY-----
+$ cosign sign --key cosign.key --allow-http-registry --yes localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+Signing artifact...
+Pushing signature to: localhost:5001/ssdf-app
+[exit code: 0]
+
+# Assignment command as written ('cosign attache sbom' is a typo for 'attach').
+# 'attach sbom' is deprecated in cosign and stores the SBOM UNSIGNED; the signed
+# SBOM used by the policy gate is the in-toto attestation created right after.
+$ cosign attach sbom --sbom sbom.cyclonedx.json --type cyclonedx --allow-http-registry localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+WARNING: SBOM attachments are deprecated and support will be removed in a Cosign release soon after 2024-02-22 (see https://github.com/sigstore/cosign/issues/2755). Instead, please use SBOM attestations.
+WARNING: Attaching SBOMs this way does not sign them. To sign them, use 'cosign attest --predicate sbom.cyclonedx.json --key <key path>'.
+Uploading SBOM file for [localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3] to [localhost:5001/ssdf-app:sha256-0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3.sbom] with mediaType [application/vnd.cyclonedx+json].
+
+[exit code: 0]
+$ cosign attest --key cosign.key --type cyclonedx --predicate sbom.cyclonedx.json --allow-http-registry --yes localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+Using payload from: sbom.cyclonedx.json
+Signing artifact...
+[exit code: 0]
+$ python3 scripts/make_provenance.py --image localhost:5001/ssdf-app:v6.0 --base-image python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9 --started-on 2026-09-23T22:52:40Z --out evidence/provenance.predicate.json
+wrote evidence/provenance.predicate.json (builder.id=https://ssdf-week6-lab.local/builders/run_lab.sh@v1, 4 resolved dependencies)
+[exit code: 0]
+$ cosign attest --key cosign.key --type slsaprovenance1 --predicate evidence/provenance.predicate.json --allow-http-registry --yes localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+Using payload from: evidence/provenance.predicate.json
+Signing artifact...
+[exit code: 0]
+
+==========================================================================
+TASK 2.4 - Verify signatures and extract attached payloads
+==========================================================================
+$ cosign verify --key cosign.pub --allow-http-registry localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 > evidence/cosign_verify.json
+
+Verification for localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The signatures were verified against the specified public key
+[exit code: 0]
+  signed: localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3  digest=sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3  type=https://cyclonedx.org/bom
+  signed: localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3  digest=sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3  type=https://slsa.dev/provenance/v1
+  signed: localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3  digest=sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3  type=https://sigstore.dev/cosign/sign/v1
+$ cosign verify-attestation --key cosign.pub --type cyclonedx --allow-http-registry localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 > evidence/sbom_attestation.jsonl
+
+Verification for localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The signatures were verified against the specified public key
+[exit code: 0]
+  predicateType : https://cyclonedx.org/bom
+  subject       : ['localhost:5001/ssdf-app@sha256:0e56bbf023f29a45...']
+  CycloneDX     : specVersion 1.7, 2765 components
+Extracting signed SBOM payload -> evidence/sbom_from_attestation.json
+  extracted 2765 components; identical to sbom.cyclonedx.json: True
+$ cosign verify-attestation --key cosign.pub --type slsaprovenance1 --allow-http-registry localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 > evidence/provenance_attestation.jsonl
+
+Verification for localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The signatures were verified against the specified public key
+[exit code: 0]
+  predicateType : https://slsa.dev/provenance/v1
+  subject       : ['localhost:5001/ssdf-app@sha256:0e56bbf023f29a45...']
+  builder.id    : https://ssdf-week6-lab.local/builders/run_lab.sh@v1
+  buildType     : https://ssdf-week6-lab.local/buildtypes/dockerfile@v1
+  dependency    : pkg:docker/python:3.11-slim {'sha256': 'da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9'}
+  dependency    : file:Dockerfile {'sha256': '9011a0b9edac8e2043d9de07c51d3a47ea7f41688f13f37cf2a7e5ffe6a6b970'}
+  dependency    : file:app/requirements.txt {'sha256': '0987503ffebc35bfe875842ea0fbb97893e271bacaa8656bfa902b0496cd6af4'}
+  dependency    : file:app/main.py {'sha256': '5b50ad372ed913d45f6f3269b111cc469f8938b1668fc1b0275e595b717c0f9b'}
+
+# Download the (unsigned, deprecated) attached SBOM for comparison
+$ cosign download sbom --allow-http-registry localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 > evidence/sbom_attached_download.json
+WARNING: SBOM attachments are deprecated and support will be removed in a Cosign release soon after 2024-02-22 (see https://github.com/sigstore/cosign/issues/2755). Instead, please use SBOM attestations.
+WARNING: Downloading SBOMs this way does not ensure its authenticity. If you want to ensure a tamper-proof SBOM, download it using 'cosign download attestation <image uri>'.
+Found SBOM of media type: application/vnd.cyclonedx+json
+  downloaded 956699 bytes
+
+# NEGATIVE TEST: verification with an untrusted key must FAIL
+$ cosign verify --key evidence/untrusted.pub --allow-http-registry localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 > evidence/negative_verify.json
+Error: no matching attestations: failed to verify log inclusion: transparency log certificate does not match
+failed to verify log inclusion: transparency log certificate does not match
+failed to verify log inclusion: transparency log certificate does not match
+error during command execution: no matching attestations: failed to verify log inclusion: transparency log certificate does not match
+failed to verify log inclusion: transparency log certificate does not match
+failed to verify log inclusion: transparency log certificate does not match
+[exit code: 1]
+RESULT: rejected as expected (signature not made by the trusted key)
+
+==========================================================================
+TASK 4.1 - Vulnerability scan of sbom.cyclonedx.json (grype)
+==========================================================================
+$ grype db status
+Path:      /Users/krabbypatty/Library/Caches/grype/db/6/vulnerability.db
+Schema:    v6.1.9
+Built:     2026-09-23T06:31:39Z
+From:      https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.9_2026-09-23T00:31:12Z_1790145099.tar.zst?checksum=sha256%3A93487281c93d3cb3649878932ff9003991b607136b14cb0943b74846bfd611a8
+Status:    valid
+[exit code: 0]
+$ grype sbom:sbom.cyclonedx.json -o table -o json=evidence/grype_results.json
+[0000]  WARN registry communication is insecure: insecure-use-http enabled
+NAME                INSTALLED                          FIXED IN                       TYPE    VULNERABILITY     SEVERITY    EPSS          RISK   
+perl-base           5.40.1-6+deb13u1                                                  deb     CVE-2026-82560    High        0.6% (48th)   0.5    
+zlib1g              1:1.3.dfsg+really1.3.1-1+b1                                       deb     CVE-2026-85091    High        0.4% (37th)   0.3    
+libncursesw6        6.5+20250216-2                     (won't fix)                    deb     CVE-2025-69720    High        0.4% (38th)   0.3    
+libtinfo6           6.5+20250216-2                     (won't fix)                    deb     CVE-2025-69720    High        0.4% (38th)   0.3    
+ncurses-base        6.5+20250216-2                     (won't fix)                    deb     CVE-2025-69720    High        0.4% (38th)   0.3    
+ncurses-bin         6.5+20250216-2                     (won't fix)                    deb     CVE-2025-69720    High        0.4% (38th)   0.3    
+perl-base           5.40.1-6+deb13u1                   (won't fix)                    deb     CVE-2026-9538     High        0.4% (38th)   0.3    
+python              3.11.16                            3.15.0rc2                      binary  CVE-2026-17084    Medium      0.6% (47th)   0.3    
+python              3.11.16                            *3.13.10, 3.14.1, 3.15.0a2     binary  CVE-2025-12781    Medium      0.6% (45th)   0.3    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2018-20796    Negligible  5.8% (92nd)   0.3    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2018-20796    Negligible  5.8% (92nd)   0.3    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-19499    High        0.4% (31st)   0.3    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-19499    High        0.4% (31st)   0.3    
+python              3.11.16                                                           binary  CVE-2026-87910    Medium      0.4% (37th)   0.2    
+python              3.11.16                                                           binary  CVE-2026-19672    Medium      0.4% (34th)   0.2    
+python              3.11.16                            *3.13.15, 3.14.7, 3.15.0a6     binary  CVE-2025-15366    Medium      0.4% (36th)   0.2    
+bsdutils            1:2.41.5-0+deb13u1                 (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+libblkid1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+liblastlog2-2       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+libmount1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+libsmartcols1       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+libuuid1            2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+login               1:4.16.0-2+really2.41.5-0+deb13u1  (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+mount               2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+util-linux          2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-3184     Medium      0.4% (37th)   0.2    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-77117    Medium      0.4% (35th)   0.2    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-80489    Medium      0.4% (35th)   0.2    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-77117    Medium      0.4% (35th)   0.2    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-80489    Medium      0.4% (35th)   0.2    
+python              3.11.16                            3.15.0rc2                      binary  CVE-2026-15806    Medium      0.4% (34th)   0.2    
+perl-base           5.40.1-6+deb13u1                   (won't fix)                    deb     CVE-2026-19487    Medium      0.4% (35th)   0.2    
+tar                 1.35+dfsg-3.1                      (won't fix)                    deb     CVE-2026-5704     Medium      0.4% (34th)   0.2    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-6238     Medium      0.4% (29th)   0.2    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-6238     Medium      0.4% (29th)   0.2    
+python              3.11.16                            3.15.0a6                       binary  CVE-2025-15367    Medium      0.4% (30th)   0.2    
+tar                 1.35+dfsg-3.1                                                     deb     CVE-2005-2541     Negligible  4.0% (90th)   0.2    
+libpam-modules      1.7.0-5                            (won't fix)                    deb     CVE-2026-54411    Medium      0.3% (25th)   0.2    
+libpam-modules-bin  1.7.0-5                            (won't fix)                    deb     CVE-2026-54411    Medium      0.3% (25th)   0.2    
+libpam-runtime      1.7.0-5                            (won't fix)                    deb     CVE-2026-54411    Medium      0.3% (25th)   0.2    
+libpam0g            1.7.0-5                            (won't fix)                    deb     CVE-2026-54411    Medium      0.3% (25th)   0.2    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-5435     High        0.2% (14th)   0.2    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-5435     High        0.2% (14th)   0.2    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2019-1010022  Negligible  3.2% (87th)   0.2    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2019-1010022  Negligible  3.2% (87th)   0.2    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2019-1010024  Negligible  3.2% (87th)   0.2    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2019-1010024  Negligible  3.2% (87th)   0.2    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-8674     Medium      0.3% (23rd)   0.2    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-8674     Medium      0.3% (23rd)   0.2    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2019-1010023  Negligible  3.0% (86th)   0.2    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2019-1010023  Negligible  3.0% (86th)   0.2    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-19542    Medium      0.3% (20th)   0.1    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-19542    Medium      0.3% (20th)   0.1    
+python              3.11.16                            3.14.0b1                       binary  CVE-2026-82049    High        0.2% (8th)    0.1    
+bsdutils            1:2.41.5-0+deb13u1                 (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+libblkid1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+liblastlog2-2       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+libmount1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+libsmartcols1       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+libuuid1            2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+login               1:4.16.0-2+really2.41.5-0+deb13u1  (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+mount               2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+util-linux          2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-76642    High        0.2% (7th)    0.1    
+login.defs          1:4.17.4-2                         (won't fix)                    deb     CVE-2024-56433    Low         0.4% (36th)   0.1    
+passwd              1:4.17.4-2                         (won't fix)                    deb     CVE-2024-56433    Low         0.4% (36th)   0.1    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2010-4756     Negligible  2.6% (84th)   0.1    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2010-4756     Negligible  2.6% (84th)   0.1    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2019-9192     Negligible  2.4% (83rd)   0.1    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2019-9192     Negligible  2.4% (83rd)   0.1    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-6791     Medium      0.2% (11th)   0.1    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-6791     Medium      0.2% (11th)   0.1    
+zlib1g              1:1.3.dfsg+really1.3.1-1+b1        (won't fix)                    deb     CVE-2026-27171    Medium      0.2% (13th)   0.1    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2019-1010025  Negligible  2.3% (82nd)   0.1    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2019-1010025  Negligible  2.3% (82nd)   0.1    
+libacl1             2.3.2-2+b1                         (won't fix)                    deb     CVE-2026-54369    High        0.2% (4th)    0.1    
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-89092    Medium      0.2% (15th)   0.1    
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-89092    Medium      0.2% (15th)   0.1    
+python              3.11.16                            *3.13.13, 3.14.4, 3.15.0a8     binary  CVE-2026-3446     Medium      0.2% (8th)    0.1    
+python              3.11.16                            3.15.0rc2                      binary  CVE-2026-15310    Low         0.4% (33rd)   0.1    
+libncursesw6        6.5+20250216-2                     (won't fix)                    deb     CVE-2025-6141     Medium      0.2% (9th)    < 0.1  
+libtinfo6           6.5+20250216-2                     (won't fix)                    deb     CVE-2025-6141     Medium      0.2% (9th)    < 0.1  
+ncurses-base        6.5+20250216-2                     (won't fix)                    deb     CVE-2025-6141     Medium      0.2% (9th)    < 0.1  
+ncurses-bin         6.5+20250216-2                     (won't fix)                    deb     CVE-2025-6141     Medium      0.2% (9th)    < 0.1  
+python              3.11.16                            *3.13.14, 3.14.5rc1, 3.15.0b1  binary  CVE-2026-6019     Medium      0.2% (11th)   < 0.1  
+bsdutils            1:2.41.5-0+deb13u1                 (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+libblkid1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+liblastlog2-2       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+libmount1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+libsmartcols1       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+libuuid1            2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+login               1:4.16.0-2+really2.41.5-0+deb13u1  (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+mount               2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+util-linux          2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78409    High        0.1% (2nd)    < 0.1  
+perl-base           5.40.1-6+deb13u1                   (won't fix)                    deb     CVE-2026-15534    Medium      0.2% (6th)    < 0.1  
+bsdutils            1:2.41.5-0+deb13u1                 (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+libblkid1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+liblastlog2-2       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+libmount1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+libsmartcols1       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+libuuid1            2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+login               1:4.16.0-2+really2.41.5-0+deb13u1  (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+mount               2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+util-linux          2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78408    High        0.1% (1st)    < 0.1  
+libsqlite3-0        3.46.1-7+deb13u2                   (won't fix)                    deb     CVE-2026-50812    Medium      0.2% (5th)    < 0.1  
+libsqlite3-0        3.46.1-7+deb13u2                   (won't fix)                    deb     CVE-2026-50813    Medium      0.2% (5th)    < 0.1  
+libattr1            1:2.5.2-3                          (won't fix)                    deb     CVE-2026-54371    Medium      0.1% (4th)    < 0.1  
+libsqlite3-0        3.46.1-7+deb13u2                                                  deb     CVE-2021-45346    Negligible  1.6% (74th)   < 0.1  
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-18374    Medium      0.1% (4th)    < 0.1  
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-18374    Medium      0.1% (4th)    < 0.1  
+bsdutils            1:2.41.5-0+deb13u1                 (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+libblkid1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+liblastlog2-2       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+libmount1           2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+libsmartcols1       2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+libuuid1            2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+login               1:4.16.0-2+really2.41.5-0+deb13u1  (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+mount               2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+util-linux          2.41.5-0+deb13u1                   (won't fix)                    deb     CVE-2026-78410    High        < 0.1% (0th)  < 0.1  
+tar                 1.35+dfsg-3.1                      (won't fix)                    deb     CVE-2026-18508    Medium      0.1% (3rd)    < 0.1  
+libacl1             2.3.2-2+b1                         (won't fix)                    deb     CVE-2026-54370    High        < 0.1% (0th)  < 0.1  
+libsystemd0         257.13-1~deb13u1                   (won't fix)                    deb     CVE-2026-15059    Medium      0.1% (2nd)    < 0.1  
+libudev1            257.13-1~deb13u1                   (won't fix)                    deb     CVE-2026-15059    Medium      0.1% (2nd)    < 0.1  
+libbz2-1.0          1.0.8-6                            (won't fix)                    deb     CVE-2026-42250    Medium      0.1% (2nd)    < 0.1  
+apt                 3.0.3                                                             deb     CVE-2011-3374     Negligible  1.2% (66th)   < 0.1  
+libapt-pkg7.0       3.0.3                                                             deb     CVE-2011-3374     Negligible  1.2% (66th)   < 0.1  
+libsystemd0         257.13-1~deb13u1                   (won't fix)                    deb     CVE-2026-40228    Low         0.2% (7th)    < 0.1  
+libudev1            257.13-1~deb13u1                   (won't fix)                    deb     CVE-2026-40228    Low         0.2% (7th)    < 0.1  
+login.defs          1:4.17.4-2                                                        deb     CVE-2007-5686     Negligible  0.9% (59th)   < 0.1  
+passwd              1:4.17.4-2                                                        deb     CVE-2007-5686     Negligible  0.9% (59th)   < 0.1  
+tar                 1.35+dfsg-3.1                      (won't fix)                    deb     CVE-2026-18477    Medium      < 0.1% (0th)  < 0.1  
+libsystemd0         257.13-1~deb13u1                   (won't fix)                    deb     CVE-2026-16742    Medium      < 0.1% (0th)  < 0.1  
+libudev1            257.13-1~deb13u1                   (won't fix)                    deb     CVE-2026-16742    Medium      < 0.1% (0th)  < 0.1  
+libc-bin            2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-6368     Low         0.1% (1st)    < 0.1  
+libc6               2.41-12+deb13u4                    (won't fix)                    deb     CVE-2026-6368     Low         0.1% (1st)    < 0.1  
+perl-base           5.40.1-6+deb13u1                                                  deb     CVE-2011-4116     Negligible  0.5% (43rd)   < 0.1  
+libsystemd0         257.13-1~deb13u1                                                  deb     CVE-2013-4392     Negligible  0.5% (39th)   < 0.1  
+libudev1            257.13-1~deb13u1                                                  deb     CVE-2013-4392     Negligible  0.5% (39th)   < 0.1  
+bsdutils            1:2.41.5-0+deb13u1                                                deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+libblkid1           2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+liblastlog2-2       2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+libmount1           2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+libsmartcols1       2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+libuuid1            2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+login               1:4.16.0-2+really2.41.5-0+deb13u1                                 deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+mount               2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+util-linux          2.41.5-0+deb13u1                                                  deb     CVE-2022-0563     Negligible  0.4% (36th)   < 0.1  
+libsystemd0         257.13-1~deb13u1                                                  deb     CVE-2023-31439    Negligible  0.3% (28th)   < 0.1  
+libudev1            257.13-1~deb13u1                                                  deb     CVE-2023-31439    Negligible  0.3% (28th)   < 0.1  
+coreutils           9.7-3                                                             deb     CVE-2017-18018    Negligible  0.3% (28th)   < 0.1  
+libsystemd0         257.13-1~deb13u1                                                  deb     CVE-2023-31437    Negligible  0.3% (27th)   < 0.1  
+libudev1            257.13-1~deb13u1                                                  deb     CVE-2023-31437    Negligible  0.3% (27th)   < 0.1  
+diffutils           1:3.10-4                                                          deb     CVE-2026-53910    Negligible  0.3% (26th)   < 0.1  
+libsystemd0         257.13-1~deb13u1                                                  deb     CVE-2023-31438    Negligible  0.3% (25th)   < 0.1  
+libudev1            257.13-1~deb13u1                                                  deb     CVE-2023-31438    Negligible  0.3% (25th)   < 0.1  
+libsqlite3-0        3.46.1-7+deb13u2                                                  deb     CVE-2025-70873    Negligible  0.3% (23rd)   < 0.1  
+coreutils           9.7-3                                                             deb     CVE-2025-5278     Negligible  0.3% (21st)   < 0.1  
+python              3.11.16                            *3.13.13, 3.14.4, 3.15.0a8     binary  CVE-2026-3479     Negligible  0.2% (15th)   < 0.1  
+coreutils           9.7-3                                                             deb     CVE-2026-56392    Negligible  0.1% (4th)    < 0.1  
+coreutils           9.7-3                                                             deb     CVE-2026-56391    Negligible  0.1% (3rd)    < 0.1  
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2026-86805    Medium      N/A           N/A    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2026-86805    Medium      N/A           N/A    
+libc-bin            2.41-12+deb13u4                                                   deb     CVE-2026-95818    Low         N/A           N/A    
+libc6               2.41-12+deb13u4                                                   deb     CVE-2026-95818    Low         N/A           N/A
+[exit code: 0]
+
+==========================================================================
+TASK 4.2 - Automated remediation report (obsolete / vulnerable dependencies)
+==========================================================================
+$ python3 scripts/remediation_report.py --sbom sbom.cyclonedx.json --grype evidence/grype_results.json --requirements app/requirements.txt --image localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 --out remediation_report.md
+wrote remediation_report.md: 8 python pkgs, 1 obsolete, 0 critical, 50 high
+[exit code: 0]
+# SBOM Vulnerability Remediation Report
+
+- **Image:** `localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3`
+- **SBOM:** `sbom.cyclonedx.json` (2765 components, CycloneDX 1.7)
+- **Scanner:** grype 0.119.0 (DB built 2026-09-23T06:31:39Z)
+- **Generated:** 2026-09-23 22:52 UTC
+- **SSDF practices:** RV.1.1 (identify vulnerabilities continuously), RV.2.1 (assess, prioritize, remediate)
+
+## Severity summary
+
+| Critical | High | Medium | Low | Negligible/Unknown |
+|---:|---:|---:|---:|---:|
+| 0 | 50 | 58 | 9 | 45 |
+
+## Python dependencies
+
+| Package | Direct | Installed | Latest on PyPI | Status | Known vulnerabilities | Action |
+|---|:---:|---|---|---|---|---|
+| click | yes | 8.3.3 | 8.5.0 | OBSOLETE | none | Bump to 8.5.0 via Dependabot/Renovate PR |
+| blinker | yes | 1.9.0 | 1.9.0 | current | none | - |
+| flask | yes | 3.1.3 | 3.1.3 | current | none | - |
+| itsdangerous | yes | 2.2.0 | 2.2.0 | current | none | - |
+| jinja2 | yes | 3.1.6 | 3.1.6 | current | none | - |
+| markupsafe | yes | 3.0.3 | 3.0.3 | current | none | - |
+| packaging | transitive | 26.3 | 26.3 | current | none | - |
+| werkzeug | yes | 3.1.8 | 3.1.8 | current | none | - |
+
+## Critical / High findings (all package types)
+
+| Severity | ID | Package | Type | Installed | Fixed in | Fix state | SLA |
+|---|---|---|---|---|---|---|---|
+| High | CVE-2026-76642 | bsdutils | deb | 1:2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | bsdutils | deb | 1:2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | bsdutils | deb | 1:2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | bsdutils | deb | 1:2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-54369 | libacl1 | deb | 2.3.2-2+b1 | - | wont-fix | 30 days |
+| High | CVE-2026-54370 | libacl1 | deb | 2.3.2-2+b1 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | libblkid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | libblkid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | libblkid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | libblkid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-19499 | libc-bin | deb | 2.41-12+deb13u4 | - | wont-fix | 30 days |
+| High | CVE-2026-5435 | libc-bin | deb | 2.41-12+deb13u4 | - | wont-fix | 30 days |
+| High | CVE-2026-19499 | libc6 | deb | 2.41-12+deb13u4 | - | wont-fix | 30 days |
+| High | CVE-2026-5435 | libc6 | deb | 2.41-12+deb13u4 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | liblastlog2-2 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | liblastlog2-2 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | liblastlog2-2 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | liblastlog2-2 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | libmount1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | libmount1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | libmount1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | libmount1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2025-69720 | libncursesw6 | deb | 6.5+20250216-2 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | libsmartcols1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | libsmartcols1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | libsmartcols1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | libsmartcols1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2025-69720 | libtinfo6 | deb | 6.5+20250216-2 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | libuuid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | libuuid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | libuuid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | libuuid1 | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | login | deb | 1:4.16.0-2+really2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | login | deb | 1:4.16.0-2+really2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | login | deb | 1:4.16.0-2+really2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | login | deb | 1:4.16.0-2+really2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-76642 | mount | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | mount | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | mount | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | mount | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2025-69720 | ncurses-base | deb | 6.5+20250216-2 | - | wont-fix | 30 days |
+| High | CVE-2025-69720 | ncurses-bin | deb | 6.5+20250216-2 | - | wont-fix | 30 days |
+| High | CVE-2026-82560 | perl-base | deb | 5.40.1-6+deb13u1 | - | not-fixed | 30 days |
+| High | CVE-2026-9538 | perl-base | deb | 5.40.1-6+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-82049 | python | binary | 3.11.16 | 3.14.0b1 | fixed | 30 days |
+| High | CVE-2026-76642 | util-linux | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78409 | util-linux | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78408 | util-linux | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-78410 | util-linux | deb | 2.41.5-0+deb13u1 | - | wont-fix | 30 days |
+| High | CVE-2026-85091 | zlib1g | deb | 1:1.3.dfsg+really1.3.1-1+b1 | - | not-fixed | 30 days |
+
+Fix state `fixed`: rebuild on the patched base image / bump the package. Fix state `not-fixed` or `wont-fix`: no upstream patch; either switch base image or record a time-boxed risk acceptance in `policy/exceptions.json` (id, package, justification, expires). The deployment gate blocks until one of these is done.
+
+## Automated remediation
+
+1 obsolete Python package(s) detected. Automated pull requests are configured in `.github/dependabot.yml` (pip, docker, github-actions ecosystems; security updates grouped) and `renovate.json` (digest pinning, vulnerability alerts). Each bump PR re-runs `hardened_pipeline.yml`, so a new SBOM, signature, provenance and policy decision are produced before merge.
+
+
+==========================================================================
+TASK 3 - Policy-as-code gate (conftest + attestation.rego)
+==========================================================================
+$ python3 scripts/build_policy_input.py --image-ref localhost:5001/ssdf-app:v6.0 --digest sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3 --signature-json evidence/cosign_verify.json --signature-rc 0 --signature-method key --sbom sbom.cyclonedx.json --sbom-att evidence/sbom_attestation.jsonl --sbom-att-rc 0 --prov-att evidence/provenance_attestation.jsonl --prov-att-rc 0 --grype evidence/grype_results.json --out evidence/policy_input.json
+policy input -> evidence/policy_input.json
+  signature verified : True ['sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3']
+  sbom attestation   : {'verified': True, 'matches_scanned_sbom': True, 'component_count': 2765}
+  provenance         : verified=True builder=https://ssdf-week6-lab.local/builders/run_lab.sh@v1
+  vulnerabilities    : {'High': 50, 'Medium': 58, 'Negligible': 45, 'Low': 9}
+[exit code: 0]
+
+# Policy unit tests
+$ conftest verify --policy policy --no-color
+
+16 tests, 16 passed, 0 warnings, 0 failures, 0 exceptions, 0 skipped
+[exit code: 0]
+
+# Gate decision for localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+$ conftest test evidence/policy_input.json --policy policy --data policy/exceptions.json --no-color
+WARN - evidence/policy_input.json - main - vulnerabilities: 50 Critical/High finding(s) waived by documented exception
+WARN - evidence/policy_input.json - main - vulnerabilities: 58 Medium finding(s) tracked in the remediation backlog
+
+16 tests, 14 passed, 2 warnings, 0 failures, 0 exceptions
+[exit code: 0]
+
+# NEGATIVE TEST: tampered metadata (unsigned, rogue builder, Critical CVE) must be DENIED
+$ conftest test policy/fixtures/tampered_input.json --policy policy --data policy/exceptions.json --no-color
+FAIL - policy/fixtures/tampered_input.json - main - provenance: builder https://attacker.example/rogue-runner is not an authorized CI builder
+FAIL - policy/fixtures/tampered_input.json - main - provenance: provenance subject does not reference the image digest
+FAIL - policy/fixtures/tampered_input.json - main - sbom: SBOM inside the signed attestation differs from the SBOM that was scanned
+FAIL - policy/fixtures/tampered_input.json - main - signature: cosign signature verification did not pass
+FAIL - policy/fixtures/tampered_input.json - main - signature: signed digest sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb does not match image digest sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+FAIL - policy/fixtures/tampered_input.json - main - vulnerabilities: Critical CVE-2024-9999 in openssl 3.0.0 (fixed in: 3.0.15)
+FAIL - policy/fixtures/tampered_input.json - main - vulnerabilities: High CVE-2024-8888 in werkzeug 2.0.0 (fixed in: 3.0.6)
+
+16 tests, 9 passed, 0 warnings, 7 failures, 0 exceptions
+[exit code: 1]
+RESULT: denied as expected
+
+==========================================================================
+SUMMARY
+==========================================================================
+Image                    : localhost:5001/ssdf-app@sha256:0e56bbf023f29a45a61cc40e5414854d090bdce49569f4e86e38928e3a9218c3
+Signature (cosign verify): PASS
+SBOM attestation         : PASS
+SLSA provenance          : PASS
+Untrusted key rejected   : PASS
+Policy gate (conftest)   : PASS
+Completed (UTC)          : 2026-09-23T22:52:58Z

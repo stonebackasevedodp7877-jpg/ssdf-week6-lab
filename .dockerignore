@@ -1,0 +1,4 @@
+# Keep signing keys, evidence and VCS metadata out of the build context
+*
+!app/main.py
+!app/requirements.txt

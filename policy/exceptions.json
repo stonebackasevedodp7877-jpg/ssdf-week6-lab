@@ -1,0 +1,304 @@
+{
+  "vulnerability_exceptions": [
+    {
+      "id": "CVE-2026-76642",
+      "package": "bsdutils",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on bsdutils (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "bsdutils",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on bsdutils (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "bsdutils",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on bsdutils (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "bsdutils",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on bsdutils (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-54369",
+      "package": "libacl1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-54369 on libacl1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-54370",
+      "package": "libacl1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-54370 on libacl1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "libblkid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on libblkid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "libblkid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on libblkid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "libblkid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on libblkid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "libblkid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on libblkid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-19499",
+      "package": "libc-bin",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-19499 on libc-bin (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-5435",
+      "package": "libc-bin",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-5435 on libc-bin (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-19499",
+      "package": "libc6",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-19499 on libc6 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-5435",
+      "package": "libc6",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-5435 on libc6 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "liblastlog2-2",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on liblastlog2-2 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "liblastlog2-2",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on liblastlog2-2 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "liblastlog2-2",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on liblastlog2-2 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "liblastlog2-2",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on liblastlog2-2 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "libmount1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on libmount1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "libmount1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on libmount1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "libmount1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on libmount1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "libmount1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on libmount1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2025-69720",
+      "package": "libncursesw6",
+      "justification": "No upstream fix from Debian/CPython for CVE-2025-69720 on libncursesw6 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "libsmartcols1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on libsmartcols1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "libsmartcols1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on libsmartcols1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "libsmartcols1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on libsmartcols1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "libsmartcols1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on libsmartcols1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2025-69720",
+      "package": "libtinfo6",
+      "justification": "No upstream fix from Debian/CPython for CVE-2025-69720 on libtinfo6 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "libuuid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on libuuid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "libuuid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on libuuid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "libuuid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on libuuid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "libuuid1",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on libuuid1 (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "login",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on login (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "login",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on login (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "login",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on login (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "login",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on login (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "mount",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on mount (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "mount",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on mount (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "mount",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on mount (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "mount",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on mount (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2025-69720",
+      "package": "ncurses-base",
+      "justification": "No upstream fix from Debian/CPython for CVE-2025-69720 on ncurses-base (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2025-69720",
+      "package": "ncurses-bin",
+      "justification": "No upstream fix from Debian/CPython for CVE-2025-69720 on ncurses-bin (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-82560",
+      "package": "perl-base",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-82560 on perl-base (grype fix_state=not-fixed); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-9538",
+      "package": "perl-base",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-9538 on perl-base (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-76642",
+      "package": "util-linux",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-76642 on util-linux (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78409",
+      "package": "util-linux",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78409 on util-linux (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78408",
+      "package": "util-linux",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78408 on util-linux (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "package": "util-linux",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-78410 on util-linux (grype fix_state=wont-fix); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-85091",
+      "package": "zlib1g",
+      "justification": "No upstream fix from Debian/CPython for CVE-2026-85091 on zlib1g (grype fix_state=not-fixed); package not exploitable by the Flask app at runtime.",
+      "expires": "2026-12-31T00:00:00Z"
+    },
+    {
+      "id": "CVE-2026-82049",
+      "package": "python",
+      "justification": "Grype reports fix only in CPython 3.14.0b1, an unreleased pre-release of a newer major version; no backport exists for the pinned 3.11.x line, so jumping there is not viable for this hardened, digest-pinned image.",
+      "expires": "2026-12-31T00:00:00Z"
+    }
+  ]
+}

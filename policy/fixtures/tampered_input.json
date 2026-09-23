@@ -1,0 +1,15 @@
+{
+  "image": {"reference": "localhost:5001/ssdf-app:v6.0", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "signature": {"verified": false, "method": "key", "signed_digests": ["sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]},
+  "sbom_attestation": {"verified": true, "matches_scanned_sbom": false, "component_count": 3},
+  "provenance": {
+    "verified": true,
+    "predicate_type": "https://slsa.dev/provenance/v1",
+    "builder_id": "https://attacker.example/rogue-runner",
+    "subject_digests": ["sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+  },
+  "vulnerabilities": {"scanned": true, "scanner": "grype", "matches": [
+    {"id": "CVE-2024-9999", "severity": "Critical", "package": "openssl", "version": "3.0.0", "fix": "3.0.15", "fix_state": "fixed"},
+    {"id": "CVE-2024-8888", "severity": "High", "package": "werkzeug", "version": "2.0.0", "fix": "3.0.6", "fix_state": "fixed"}
+  ]}
+}
